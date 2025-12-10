@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SamzSealed – Buy & Sell Sealed Pokémon TCG</title>
+  <meta name="description" content="SamzSealed buys and sells sealed Pokémon TCG products including Elite Trainer Boxes, booster boxes, and collection boxes. Submit an inquiry or ticket today.">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #050816;
+      --bg-deep: #070b2a;
+      --accent-yellow: #ffcb05; /* Pokémon yellow */
+      --accent-blue: #2a75bb;   /* Pokémon blue */
+      --accent-red: #cc0000;    /* Pokémon red */
+      --text-main: #f5f5ff;
+      --text-muted: #b7b7dd;
+      --card-border: #f0f0f0;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(circle at 10% 0, rgba(255, 255, 255, 0.06), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(42, 117, 187, 0.18), transparent 60%),
+        linear-gradient(145deg, #050816, #050816 40%, #070b2a 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      background: rgba(5, 8, 22, 0.92);
+      border-bottom: 2px solid rgba(255, 203, 5, 0.4);
+    }
+
+    .nav {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+    }
+
+    .brand {
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .brand span {
+      color: var(--accent-yellow);
+    }
+
+    .brand-badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-red));
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      opacity: 0.85;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.25rem;
+      width: 0;
+      height: 2px;
+      background: var(--accent-yellow);
+      transition: width 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 2.5rem;
+      align-items: center;
+      padding: 2.5rem 0 2rem;
+    }
+
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .nav {
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+
+    .hero-tag {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-blue);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 2.7rem);
+      margin: 0 0 0.75rem;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero h1 span {
+      color: var(--accent-yellow);
+    }
+
+    .hero p {
+      margin: 0 0 1rem;
+      color: #d0d0f2;
+      font-size: 0.98rem;
+    }
+
+    .hero-highlight {
+      margin: 0 0 1.5rem;
+      font-size: 0.9rem;
+      color: var(--accent-yellow);
+      opacity: 0.95;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .pill {
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.9;
+      background: rgba(7, 11, 42, 0.8);
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    /* Pokémon card-style buttons */
+    .btn-card {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1.4rem;
+      border-radius: 0.9rem;
+      border: 3px solid #f8f8f8;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      box-shadow:
+        0 0 0 2px #2b2b2b,
+        0 8px 0 #1e1e1e,
+        0 12px 20px rgba(0, 0, 0, 0.55);
+      transform: translateY(0);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+      background: radial-gradient(circle at top, #fff7d9 0, #f0c745 40%, #d89f2a 100%);
+      color: #301b0b;
+    }
+
+    .btn-card.secondary {
+      background: radial-gradient(circle at top, #e6f0ff 0, #63a4ff 40%, #2a75bb 100%);
+      color: #04101f;
+    }
+
+    .btn-card.submit {
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.3rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-card:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 2px #ffffff,
+        0 10px 0 #232323,
+        0 14px 24px rgba(0, 0, 0, 0.7);
+      filter: brightness(1.05);
+    }
+
+    .btn-card:active {
+      transform: translateY(1px);
+      box-shadow:
+        0 0 0 2px #e8e8e8,
+        0 5px 0 #181818,
+        0 8px 16px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-card {
+      border-radius: 1.1rem;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      padding: 1.35rem;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 60%),
+        linear-gradient(160deg, rgba(42, 117, 187, 0.8), rgba(5, 8, 22, 0.95));
+      font-size: 0.85rem;
+      color: #f5f5ff;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 6px solid rgba(255, 255, 255, 0.15);
+      top: -50px;
+      right: -50px;
+      opacity: 0.4;
+    }
+
+    .hero-card h2 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+    }
+
+    .hero-card-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .hero-card-list li {
+      margin-bottom: 0.45rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .hero-card-list span.icon {
+      font-size: 0.7rem;
+      opacity: 0.9;
+    }
+
+    section {
+      margin-top: 2.5rem;
+    }
+
+    section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+    }
+
+    section p.section-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.75rem;
+    }
+
+    @media (max-width: 800px) {
+      .two-column {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.16);
+      padding: 1rem 1rem 1.25rem;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.07), transparent 60%),
+        rgba(7, 11, 42, 0.96);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0 0 0.6rem;
+      font-size: 0.9rem;
+      color: #d4d4f0;
+    }
+
+    .list-compact {
+      font-size: 0.85rem;
+      color: #c2c2e8;
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .form-group {
+      margin-bottom: 0.9rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      margin-bottom: 0.25rem;
+      color: #bfbfdd;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 0.55rem 0.6rem;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(4, 7, 28, 0.96);
+      color: #f5f5ff;
+      font: inherit;
+      resize: vertical;
+      min-height: 2.4rem;
+    }
+
+    textarea {
+      min-height: 110px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #7e7ea3;
+    }
+
+    .note {
+      font-size: 0.78rem;
+      color: #a6a6c9;
+      margin-top: 0.25rem;
+    }
+
+    .highlight-box {
+      border-radius: 0.8rem;
+      padding: 0.8rem 0.9rem;
+      background: rgba(255, 203, 5, 0.08);
+      border: 1px dashed rgba(255, 203, 5, 0.6);
+      font-size: 0.83rem;
+      color: #fff7d0;
+      margin-top: 0.4rem;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 1rem 1.25rem 1.5rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #a3a3c5;
+      margin-top: 3rem;
+    }
+
+    .footer-links {
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    .footer-links a {
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      opacity: 0.9;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        SAMZ<span>SEALED</span>.COM
+        <div class="brand-badge">Sealed TCG</div>
+      </div>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#inquiry">Availability</a>
+        <a href="#ticket">Sell to Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="hero-tag">Sealed Pokémon TCG · Buy & Sell</div>
+        <h1>
+          Welcome to <span>SamzSealed</span><br />
+          Your Plug for Sealed Pokémon
+        </h1>
+        <p>
+          SamzSealed.com focuses on sealed Pokémon TCG products only —
+          <strong>Elite Trainer Boxes</strong>, booster boxes, collection boxes, cases, and more.
+          Whether you're loading up your collection or cashing out, we’ve got you covered.
+        </p>
+        <p class="hero-highlight">
+          For sellers, we typically pay
+          <strong>65–70% of current fair market value</strong> on sealed Pokémon TCG,
+          depending on condition and demand.
+        </p>
+
+        <div class="pill-row">
+          <div class="pill">Elite Trainer Boxes</div>
+          <div class="pill">Booster Boxes</div>
+          <div class="pill">Collection Boxes</div>
+          <div class="pill">Cases & Bundles</div>
+        </div>
+
+        <div class="hero-cta">
+          <a href="#inquiry" class="btn-card">Check Availability</a>
+          <a href="#ticket" class="btn-card secondary">Open Sell Ticket</a>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <h2>How It Works</h2>
+        <ul class="hero-card-list">
+          <li>
+            <span class="icon">①</span>
+            <span>Use the <strong>Availability</strong> form to ask what sealed Pokémon we currently have in stock.</span>
+          </li>
+          <li>
+            <span class="icon">②</span>
+            <span>Use the <strong>Sell Ticket</strong> form to tell us what sealed items you want to move.</span>
+          </li>
+          <li>
+            <span class="icon">③</span>
+            <span>We reply personally from <strong>samzsealed@gmail.com</strong> with a written offer, usually in the <strong>65–70%</strong> payout range if we’re buying.</span>
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ABOUT / INFO -->
+    <section id="about">
+      <h2>About SamzSealed</h2>
+      <p class="section-subtitle">
+        A sealed-only Pokémon TCG operation — no singles, no bulk, just clean sealed product buying and selling.
+      </p>
+
+      <div class="two-column">
+        <div class="card">
+          <h3>What We Buy & Sell</h3>
+          <p>
+            We specialize in <strong>sealed Pokémon TCG</strong> products, including:
+          </p>
+          <ul class="list-compact">
+            <li>Elite Trainer Boxes (ETBs)</li>
+            <li>Sealed booster boxes & booster bundles</li>
+            <li>Collection & premium collection boxes</li>
+            <li>Sealed display cases and special sets</li>
+          </ul>
+          <p class="note">
+            Items should be factory sealed. Please mention any tears, dents, or damaged wrap in your ticket so we can price it fairly.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Our Offers (65–70%)</h3>
+          <p>
+            When you submit a ticket, we check <strong>current fair market value</strong> (recent sold listings, major marketplaces, and demand) and respond with a cash offer.
+          </p>
+          <div class="highlight-box">
+            Most sealed Pokémon TCG we buy lands in a
+            <strong>65–70% of fair market value</strong> payout range, depending on:
+            <ul class="list-compact">
+              <li>Condition of the seal and box</li>
+              <li>How in-demand the item is right now</li>
+              <li>Quantity and age of the product</li>
+            </ul>
+          </div>
+          <p class="note">
+            If our offer hits your number, we'll finalize shipping or meetup details and send payment after verification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVAILABILITY INQUIRY -->
+    <section id="inquiry">
+      <h2>Availability Inquiry</h2>
+      <p class="section-subtitle">
+        Use this form to ask what sealed Pokémon TCG items are available right now or to request specific sets / products.
+      </p>
+
+      <div class="card">
+        <!-- Sends email to samzsealed@gmail.com -->
+        <form
+          id="inquiry-form"
+          action="mailto:samzsealed@gmail.com"
+          method="post"
+          enctype="text/plain"
+        >
+          <div class="form-group">
+            <label for="inquiry-name">Name</label>
+            <input
+              type="text"
+              id="inquiry-name"
+              name="Name"
+              placeholder="Your name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry-email">Email</label>
+            <input
+              type="email"
+              id="inquiry-email"
+              name="Email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry-request">What are you looking for?</label>
+            <textarea
+              id="inquiry-request"
+              name="Inquiry"
+              placeholder="Tell us which sealed products or sets you're interested in (e.g., 'Scarlet & Violet ETBs, modern booster boxes, specific set names, etc.')"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiry-contact">Preferred contact method</label>
+            <input
+              type="text"
+              id="inquiry-contact"
+              name="Contact preference"
+              placeholder="Email only, phone, or socials (optional)"
+            />
+          </div>
+
+          <button type="submit" class="btn-card submit">
+            Submit Availability Inquiry
+          </button>
+
+          <p class="note">
+            This will open your default email app and send your inquiry straight to
+            <strong>samzsealed@gmail.com</strong>, where we’ll reply with what’s in stock and pricing.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- SELL TICKET -->
+    <section id="ticket">
+      <h2>Sell Ticket – Submit Your Sealed Items</h2>
+      <p class="section-subtitle">
+        Use this ticket tab to send details about the sealed Pokémon TCG items you want to sell.
+        We’ll review and reply from <strong>samzsealed@gmail.com</strong> with a written cash offer,
+        usually paying <strong>65–70%</strong> of current fair market value.
+      </p>
+
+      <div class="card">
+        <!-- Sends email to samzsealed@gmail.com -->
+        <form
+          id="ticket-form"
+          action="mailto:samzsealed@gmail.com"
+          method="post"
+          enctype="text/plain"
+        >
+          <div class="form-group">
+            <label for="ticket-name">Name</label>
+            <input
+              type="text"
+              id="ticket-name"
+              name="Name"
+              placeholder="Your name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-email">Email</label>
+            <input
+              type="email"
+              id="ticket-email"
+              name="Email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-items">What sealed items do you have?</label>
+            <textarea
+              id="ticket-items"
+              name="Items"
+              placeholder="Example: 3x Paldean Fates ETB (sealed, mint wrap), 1x Obsidian Flames booster box (factory sealed), 2x Collection boxes (minor corner dings on outer box). Please include quantities + condition."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-photos">Photo links (optional)</label>
+            <input
+              type="text"
+              id="ticket-photos"
+              name="Photo links"
+              placeholder="Links to photos (Google Drive, imgur, etc.)"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-location">Your location</label>
+            <input
+              type="text"
+              id="ticket-location"
+              name="Location"
+              placeholder="City / State or Country (for shipping / meetup options)"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-notes">Notes / expectations</label>
+            <textarea
+              id="ticket-notes"
+              name="Notes"
+              placeholder="Let us know if you have a target price, time frame, or any other details."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-card submit">
+            Submit Sell Ticket
+          </button>
+
+          <p class="note">
+            Your ticket details will be sent directly to
+            <strong>samzsealed@gmail.com</strong>. Once we review, we’ll respond
+            with a written offer. Most sealed items fall in the
+            <strong>65–70% of current fair market value</strong> payout range if we’re buying.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> SamzSealed.com · Sealed Pokémon TCG Buy & Sell
+    <div class="footer-links">
+      Contact: <a href="mailto:samzsealed@gmail.com">samzsealed@gmail.com</a>
+    </div>
+  </footer>
+
+  <script>
+    // Set current year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
